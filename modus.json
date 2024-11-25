@@ -28,6 +28,16 @@
       "sourceModel": "meta-llama/Meta-Llama-3.1-8B-Instruct",
       "provider": "hugging-face",
       "connection": "hypermode"
+    },
+    "gemini-1-5-flash": {
+      "sourceModel": "gemini-1.5-flash",
+      "connection": "google",
+      "path": "v1beta/models/gemini-1.5-flash:generateContent"
+    },
+    "gemini-pro": {
+      "sourceModel": "gemini-pro",
+      "connection": "google",
+      "path": "v1beta/models/gemini-pro:generateContent"
     }
   },
   "connections": {
@@ -36,6 +46,13 @@
       "baseUrl": "https://api.openai.com/",
       "headers": {
         "Authorization": "Bearer {{API_KEY}}"
+      }
+    },
+    "google": {
+      "type": "http",
+      "baseUrl": "https://generativelanguage.googleapis.com/",
+      "headers": {
+        "X-goog-api-key": "{{API_KEY}}"
       }
     }
   }
