@@ -176,10 +176,7 @@ func initiateDebateRound(ps *PersonaStore, model, personaID, debateTopic, argume
     return InvokeModel(model, role, prompt)
 }
 
-// Function to write to the console
-func logToConsole(exchange DebateExchange) {
-    fmt.Printf("%s: %s\n", exchange.Speaker, exchange.Message)
-}
+
 
 // Function to run the debate
 func runDebate(debateID, model1, model2, persona1, persona2, debateTopic string) (string, error) {
@@ -196,36 +193,36 @@ func runDebate(debateID, model1, model2, persona1, persona2, debateTopic string)
 
     ps := NewPersonaStore()
     var debateHistory []DebateExchange
-
+    var debateArgument DebateExchange
     // Initial opening statements
     model1Response, err := initiateDebateRound(ps, model1, persona1, debateTopic, "", "", "")
     if err != nil {
         return "", err
     }
-    debateHistory = append(debateHistory, DebateExchange{
+    debateArgument =DebateExchange{
         PartitionKey: debateID,
-        RowKey:       fmt.Sprintf("1_%s", model1),
         Timestamp:    time.Now(),
-        Speaker:      model1,
+        Speaker:      persona1,
         Message:      model1Response,
-    })
-    logToConsole(debateHistory[len(debateHistory)-1])
+    }
+    debateHistory = append(debateHistory, debateArgument)
+    StoreExchange(debateID, debateArgument)
 
     model2Response, err := initiateDebateRound(ps, model2, persona2, debateTopic, "", model1Response, "rebuttal")
     if err != nil {
         return "", err
     }
-    debateHistory = append(debateHistory, DebateExchange{
+    debateArgument = DebateExchange{
         PartitionKey: debateID,
-        RowKey:       fmt.Sprintf("2_%s", model2),
         Timestamp:    time.Now(),
-        Speaker:      model2,
+        Speaker:      persona2,
         Message:      model2Response,
-    })
-    logToConsole(debateHistory[len(debateHistory)-1])
+    }
+    debateHistory = append(debateHistory, debateArgument)
+    StoreExchange(debateID, debateArgument)
 
     // Debate loop for back-and-forth exchanges
-    for i := 2; i <= 8; i++ {
+    for i := 3; i <= 8; i++ {
         currentModel := model1
         currentPersona := persona1
         promptType := "rebuttal"
@@ -241,14 +238,15 @@ func runDebate(debateID, model1, model2, persona1, persona2, debateTopic string)
         if err != nil {
             return "", err
         }
-        debateHistory = append(debateHistory, DebateExchange{
+        debateArgument = DebateExchange{
             PartitionKey: debateID,
-            RowKey:       fmt.Sprintf("%d_%s", i+1, currentModel),
             Timestamp:    time.Now(),
-            Speaker:      currentModel,
+            Speaker:      currentPersona,
             Message:      response,
-        })
-        logToConsole(debateHistory[len(debateHistory)-1])
+        }
+        debateHistory = append(debateHistory, debateArgument)
+        StoreExchange(debateID, debateArgument)
+    
 
         if i%2 == 0 {
             model2Response = response
@@ -262,27 +260,28 @@ func runDebate(debateID, model1, model2, persona1, persona2, debateTopic string)
     if err != nil {
         return "", err
     }
-    debateHistory = append(debateHistory, DebateExchange{
+    debateArgument = DebateExchange{
         PartitionKey: debateID,
-        RowKey:       fmt.Sprintf("9_%s", model1),
         Timestamp:    time.Now(),
-        Speaker:      model1,
+        Speaker:      persona1,
         Message:      model1Response,
-    })
-    logToConsole(debateHistory[len(debateHistory)-1])
+    }
+    debateHistory = append(debateHistory, debateArgument)
+    StoreExchange(debateID, debateArgument)
 
     model2Response, err = initiateDebateRound(ps, model2, persona2, debateTopic, strings.Join(getModelArguments(debateHistory, model2), "\n"), "", "closing")
     if err != nil {
         return "", err
     }
-    debateHistory = append(debateHistory, DebateExchange{
+    debateArgument =DebateExchange{
         PartitionKey: debateID,
-        RowKey:       fmt.Sprintf("10_%s", model2),
         Timestamp:    time.Now(),
-        Speaker:      model2,
+        Speaker:      persona2,
         Message:      model2Response,
-    })
-    logToConsole(debateHistory[len(debateHistory)-1])
+    }
+    debateHistory = append(debateHistory, debateArgument)
+    StoreExchange(debateID, debateArgument)
+
 
     // Judge's decision
     conversationSummary := ""
@@ -294,14 +293,13 @@ func runDebate(debateID, model1, model2, persona1, persona2, debateTopic string)
     if err != nil {
         return "", err
     }
-    debateHistory = append(debateHistory, DebateExchange{
+    debateArgument = DebateExchange{
         PartitionKey: debateID,
-        RowKey:       fmt.Sprintf("11_%s", "debate_judge"),
         Timestamp:    time.Now(),
         Speaker:      "debate_judge",
         Message:      judgeResponse,
-    })
-    logToConsole(debateHistory[len(debateHistory)-1])
+    }
+    StoreExchange(debateID, debateArgument)
 
     return judgeResponse, nil
 }
@@ -322,6 +320,4 @@ func StartDebate(hi string) string{
     }
 
     return fmt.Sprintf("Judge's decision: %s\n", judgeResponse)
-
-
 }
