@@ -54,6 +54,10 @@
       "headers": {
         "X-goog-api-key": "{{API_KEY}}"
       }
+    },
+    "convdb": {
+      "type": "postgresql",
+      "connString": "postgresql://{{PG_USER}}:{{PG_PASSWORD}}@c-modus-db.lr76pskjoazxgt.postgres.cosmos.azure.com:5432/modus-messages?sslmode=require"
     }
   }
 }
