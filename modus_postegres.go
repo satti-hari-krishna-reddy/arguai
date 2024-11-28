@@ -74,3 +74,25 @@ func GetCurrentConversation(debateID string) (string, error) {
 
 	return string(serialized), nil
 }
+
+func RegisterDebate(debateID, model1, model2, persona1, persona2, debateTopic string) error {
+	const query = `
+		INSERT INTO debates (debate_id, model1, model2, persona1, persona2, topic)
+		VALUES ($1, $2, $3, $4, $5, $6)
+	`
+	_, err := postgresql.Execute(
+		connection,
+		query,
+		debateID,
+		model1,
+		model2,
+		persona1,
+		persona2,
+		debateTopic,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to register debate: %w", err)
+	}
+
+	return nil
+}
