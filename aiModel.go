@@ -61,7 +61,7 @@ func invokeGeminiModel(modelName, instruction, prompt string) (string, error) {
 
     combinedText := instruction
     if prompt != "" {
-        combinedText = fmt.Sprintf("Your Role : %s and \n your task: %s", instruction, prompt)
+        combinedText = fmt.Sprintf("%s and \n your task: %s", instruction, prompt)
     }
 
     input := &GeminiModelInput{
