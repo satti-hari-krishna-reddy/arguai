@@ -1,10 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"time"
-
 	"github.com/hypermodeinc/modus/sdk/go/pkg/postgresql"
 )
 
@@ -13,9 +11,9 @@ const connection = "convdb"
 type DebateExchange struct {
 	PartitionKey string    `json:"debate_id"`
 	MessageId       int     `json:"message_id"`
-	Timestamp    time.Time `json:"timestamp"`
 	Speaker      string    `json:"speaker"`
 	Message      string    `json:"message"`
+	Timestamp    time.Time `json:"timestamp"`
 }
 
 func StoreExchange(debateID string, exchange DebateExchange) error {
@@ -39,8 +37,7 @@ func StoreExchange(debateID string, exchange DebateExchange) error {
 	return nil
 }
 
-
-func GetDebateHistory(debateID string) ([]DebateExchange, error) {
+func GetDebateHistory(debateID string) ([]DebateExchange) {
 	const query = `
 		SELECT debate_id, message_id, speaker, message, timestamp
 		FROM debate_messages
@@ -50,29 +47,10 @@ func GetDebateHistory(debateID string) ([]DebateExchange, error) {
 
 	rows, _, err := postgresql.Query[DebateExchange](connection, query, debateID)
 	if err != nil {
-		return nil, fmt.Errorf("failed to retrieve history: %w", err)
+		return rows
 	}
 
-	return rows, nil
-}
-
-func GetCurrentConversation(debateID string) (string, error) {
-	debateHistory, err := GetDebateHistory(debateID)
-	if err != nil {
-		return "", err
-	}
-
-	if len(debateHistory) == 0 {
-		return fmt.Sprintf("No conversation found for debate ID: %s", debateID), nil
-	}
-
-	// Serialize the data as a JSON-formatted string
-	serialized, err := json.MarshalIndent(debateHistory, "", "  ")
-	if err != nil {
-		return "", fmt.Errorf("failed to format conversation: %w", err)
-	}
-
-	return string(serialized), nil
+	return rows
 }
 
 func RegisterDebate(debateID, model1, model2, persona1, persona2, debateTopic string) error {
