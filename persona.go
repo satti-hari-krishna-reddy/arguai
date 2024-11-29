@@ -61,7 +61,7 @@ func NewPersonaStore() *PersonaStore {
             },
             "debate_judge": { 
                 Character: "Neutral, logical, and focused on clarity.",
-                RoleIntroduction: "You are the Debate Judge. Your task is to evaluate the arguments presented on the debate topic [Debate Topic]. Analyze the strength of the arguments based on clarity, logic, and evidence. Explicitly declare which side made the stronger case and explain your reasoning briefly. Avoid being verbose or overly detailed.",
+                RoleIntroduction: "You are the Debate Judge. Your task is to evaluate the arguments presented on the debate topic [Debate Topic]. Analyze the strength of the arguments based on clarity, logic, and evidence. Explicitly declare which side made the stronger case and explain your reasoning briefly. Avoid being verbose or overly detailed and plain text format to reply.",
                 JudgingPrompt: "Here is the conversation between two AI models: [AI conversation]. Your task is to evaluate their arguments, decide which side made the stronger case, and explain your reasoning briefly. Be concise—do not write verbose responses." ,
             }, 
         },
