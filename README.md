@@ -48,9 +48,9 @@ To run this project locally, follow these steps:
 
 ### 1. Prerequisites
 
-Before running the project, ensure you have the following installed:
+Before running the project, ensure you have the following installed and configured:
 
-- **Go** (for backend development)
+- **Go** and **TinyGo** 
 -  Install the **Modus CLI** globally with npm:
 
   ```
