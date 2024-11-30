@@ -4,7 +4,7 @@
     "default": {
       "type": "graphql",
       "path": "/graphql",
-      "auth": "bearer-token"
+      "auth": "none"
     }
   },
   "models": {
