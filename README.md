@@ -60,7 +60,7 @@ Before running the project, ensure you have the following installed and configur
 ### Cloning the Repository
 
 ```
-git clone https://github.com/yourusername/argu-ai.git
+git clone https://github.com/satti-hari-krishna-reddy/arguai
 
 cd arguai
 ```
