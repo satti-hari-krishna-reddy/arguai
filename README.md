@@ -72,7 +72,7 @@ MODUS_CONVDB_PG_PASSWORD=
 
 
 ### Run the App Locally
-To run the app with fast refresh, use the following command:
+To run the app use the following command:
 ```
  modus dev
 ```
