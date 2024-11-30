@@ -34,10 +34,8 @@ Here’s how the debate works internally:
 3. **Debate Flow**: The models debate in real-time, alternating their arguments.
 4. **AI Judge Evaluation**: After 8 rounds, a third AI model judges the debate.
 5. **Winner Announcement**: The winning model is decided based on the judge's evaluation.
-
-![Debate Flow](path-to-your-image-1.png)
-
 ---
+![aidebateflow](https://github.com/user-attachments/assets/7971b374-ad5d-4bf8-8bb1-d304dc2b2543)
 
 ### ⚙️ Setup AI Models
 Note: For the hackathon, the available models are limited due to API rate limits. Please ensure to use the Gemini model as it has higher rate limits..
